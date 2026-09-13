@@ -9,7 +9,7 @@ public sealed class RecursionDataOperationsTest(ITestOutputHelper testOutputHelp
    private readonly ITestOutputHelper _testOutputHelper = testOutputHelper;
 
    [Fact(DisplayName = "Create -> Set -> Get")]
-   public void RecursionGetSet() {
+   public void RecursionCreateSetGet() {
       var gameData = new GameData();
       gameData.Set("isFirstTime", true);
       gameData.DeepSet("player.jumpPower", 5f);
@@ -23,5 +23,21 @@ public sealed class RecursionDataOperationsTest(ITestOutputHelper testOutputHelp
       Assert.Equal(10f, gameData.DeepGet<float>("player.maxHealth"));
       Assert.Equal(6.5f, gameData.DeepGet<float>("player.health"));
       Assert.Equal(100, gameData.DeepGet<int>("player.cash"));
+   }
+   [Fact(DisplayName = "Create -> Set -> Exists")]
+   public void RecursionCreateSetExists() {
+      var gameData = new GameData();
+      gameData.Set("isFirstTime", true);
+      gameData.DeepSet("player.jumpPower", 5f);
+      gameData.DeepSet("player.speed", 5f);
+      gameData.DeepSet("player.maxHealth", 10f);
+      gameData.DeepSet("player.health", 6.5f);
+      gameData.DeepSet("player.cash", 100);
+      Assert.True(gameData.ExistsWithType<bool>("isFirstTime"));
+      Assert.True(gameData.DeepExistsWithType<float>("player.jumpPower"));
+      Assert.True(gameData.DeepExistsWithType<float>("player.speed"));
+      Assert.True(gameData.DeepExistsWithType<float>("player.maxHealth"));
+      Assert.True(gameData.DeepExistsWithType<float>("player.health"));
+      Assert.True(gameData.DeepExistsWithType<int>("player.cash"));
    }
 }

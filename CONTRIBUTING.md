@@ -9,7 +9,7 @@ Thank you for your interest in contributing to **Your Project**! Bug fixes, new 
 1. **Fork** the repository
 2. **Clone** your fork:
    ```bash
-   git clone https://github.com/Artpupser/template
+   git clone https://github.com/Artpupser/PupaLib.Data
    ```
 3. Create a branch:
    ```bash
@@ -64,7 +64,7 @@ Please test on: **Linux, Windows, macOS**
 
 ## Reporting Bugs
 
-Open an [Issue](https://github.com/Artpupser/template/issues) with:
+Open an [Issue](https://github.com/Artpupser/PupaLib.Data/issues) with:
 - OS and version
 - Steps to reproduce
 - Expected vs actual behavior

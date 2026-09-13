@@ -8,12 +8,8 @@ namespace PupaLib.Data;
 public class RecursionData {
    public const char SeparateSymbol = '.';
 
-   public RecursionData() {
-      Data = new ConcurrentDictionary<string, object>();
-   }
-
    [JsonPropertyName("data")] 
-   public ConcurrentDictionary<string, object> Data { get; private set; }
+   public ConcurrentDictionary<string, object> Data { get; private set; } = new();
 
    [JsonPropertyName("childs")] 
    public ConcurrentDictionary<string, RecursionData> Childs { get; private set; } = null!;
@@ -24,11 +20,11 @@ public class RecursionData {
 
    public override string ToString() {
       var sb = new StringBuilder();
-      DeepString(sb, 0);
+      RecursionString(sb, 0);
       return sb.ToString();
    }
 
-   private void DeepString(StringBuilder sb, int index) {
+   private void RecursionString(StringBuilder sb, int index) {
       var tabs = new string('\t', index);
 
       foreach (var data in Data) 
@@ -37,14 +33,54 @@ public class RecursionData {
       if (IsParent)
          foreach (var childPair in Childs) {
             sb.Append($"{tabs}\t/{childPair.Key}\n");
-            childPair.Value.DeepString(sb, index + 1);
+            childPair.Value.RecursionString(sb, index + 1);
          }
    }
 
    #endregion
 
-   #region SET
+   #region Exists
+   
+   public bool ExistsWithType<T>(string name) where T : notnull {
+      var result = Data.TryGetValue(name, out var value);
+      return result && value!.GetType() == typeof(T);
+   }
+   
+   public bool DeepExistsWithType<T>(string path) where T : notnull {
+      return RecursionExistsWithType<T>(path.Split(SeparateSymbol), 0);
+   }
 
+   private bool RecursionExistsWithType<T>(string[] names, int index) where T : notnull {
+      var name = names[index];
+      if (index < names.Length - 1) {
+         return Childs[name].RecursionExistsWithType<T>(names, index + 1);
+      }
+
+      return ExistsWithType<T>(name);
+   }
+   
+   public bool ExistsAny(string name) {
+      return Data.TryGetValue(name, out _);
+   }
+   
+   public bool DeepExistsAny(string path) {
+      return RecursionExistsAny(path.Split(SeparateSymbol), 0);
+   }
+
+   private bool RecursionExistsAny(string[] names, int index) {
+      var name = names[index];
+      if (index < names.Length - 1) {
+         return Childs[name].RecursionExistsAny(names, index + 1);
+      }
+
+      return ExistsAny(name);
+   }
+
+
+   #endregion
+   
+   #region Set
+   
    public void DeepSet<T>(string path, T content) where T : notnull {
       RecursionSet<T>(path.Split(SeparateSymbol), content, 0);
    }
@@ -61,16 +97,16 @@ public class RecursionData {
       Data[name] = content;
    }
    
-   public void Set<T>(string id, T content) where T : notnull {
-      Data[id] = content;
+   public void Set<T>(string name, T content) where T : notnull {
+      Data[name] = content;
    }
 
    #endregion
 
-   #region GET
+   #region Get
 
-   public T Get<T>(string id) {
-      return (T)Convert.ChangeType(Data[id], typeof(T));
+   public T Get<T>(string name) {
+      return (T)Convert.ChangeType(Data[name], typeof(T));
    }
 
    public T DeepGet<T>(string path) {

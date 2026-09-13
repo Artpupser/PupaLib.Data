@@ -2,7 +2,7 @@
 
 ## Our Pledge
 
-We, as contributors and maintainers of **Template**, pledge to make participation in our project a harassment-free experience for everyone — regardless of age, experience level, nationality, gender, sexual orientation, religion, or any other characteristic.
+We, as contributors and maintainers of **PupaLib.Data**, pledge to make participation in our project a harassment-free experience for everyone — regardless of age, experience level, nationality, gender, sexual orientation, religion, or any other characteristic.
 
 ---
 
@@ -26,7 +26,7 @@ We, as contributors and maintainers of **Template**, pledge to make participatio
 
 ## Scope
 
-This Code of Conduct applies within all project spaces — Issues, Pull Requests, Discussions, and any other channels related to **template**.
+This Code of Conduct applies within all project spaces — Issues, Pull Requests, Discussions, and any other channels related to **PupaLib.Data**.
 
 ---
 
