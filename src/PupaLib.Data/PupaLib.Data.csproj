@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
 
         <PackageId>PupaLib.Data</PackageId>
-        <Version>0.1.0</Version>
+        <Version>0.1.1</Version>
         <Authors>Artpupser</Authors>
         <Owners>Artpupser</Owners>
         <Company>Artpupser</Company>

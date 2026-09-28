@@ -14,6 +14,7 @@ public class RecursionData {
    [JsonPropertyName("childs")] 
    public ConcurrentDictionary<string, RecursionData> Childs { get; private set; } = null!;
 
+   [JsonIgnore]
    public bool IsParent => Childs != null && Childs.Any();
 
    #region String
@@ -105,6 +106,47 @@ public class RecursionData {
 
    #region Get
 
+   #region Cast
+
+   
+
+   public T GetCast<T>(string name) {
+      return (T)Data[name];
+   }
+   
+   public T DeepGetCast<T>(string path) {
+      return RecursionGetCast<T>(path.Split(SeparateSymbol), 0);
+   }
+   
+   private T RecursionGetCast<T>(string[] names, int index) {
+      var name = names[index];
+      if (names.Length - 1 != index) 
+         return Childs[name].RecursionGetCast<T>(names, index + 1);
+
+      return GetCast<T>(name);
+   }
+   #endregion
+
+   #region Obj
+   public object GetObj(string name) {
+      return Data[name];
+   }
+
+   public object DeepGetObj(string path) {
+      return RecursionGetObj(path.Split(SeparateSymbol), 0);
+   }
+   
+   private object RecursionGetObj(string[] names, int index) {
+      var name = names[index];
+      if (names.Length - 1 != index) 
+         return Childs[name].RecursionGetObj(names, index + 1);
+
+      return GetObj(name);
+   }
+   #endregion
+
+
+   #region Convert
    public T Get<T>(string name) {
       return (T)Convert.ChangeType(Data[name], typeof(T));
    }
@@ -115,10 +157,13 @@ public class RecursionData {
 
    private T RecursionGet<T>(string[] names, int index) {
       var name = names[index];
-      if (names.Length - 1 != index) return Childs[name].RecursionGet<T>(names, index + 1);
+      if (names.Length - 1 != index) 
+         return Childs[name].RecursionGet<T>(names, index + 1);
 
       return Get<T>(name);
    }
+   #endregion
+   
 
    #endregion
 }
